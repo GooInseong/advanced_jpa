@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -79,6 +81,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     /* 페이징: 데이터베이스의 레코드를 개수로 나눠 페이지를 구분하는 것을 의미한다. JPA 에서는 페이징 처리를 위해
     * Page 와 Pageable 을 사용한다.*/
     Page<Product> findByName(String name, Pageable pageable); //ProductRepositoryTest
+
+
+    /*@Query 어노테이션: @Query 어노테이션을 사용하여 직접 JQPL 을 작성할 수 있다.*/
+    @Query("select p from Product p where p.name=:name")
+    List<Product> findByNameParam(@Param("name") String name);
+
+    // 특정 칼럼만 추출하는 @Query 문
+    @Query("select p.name,p.price,p.stock from Product p where p.name=:name")
+    List<Object[]> findByNameParam2(@Param("name") String name);
 
 
 }
