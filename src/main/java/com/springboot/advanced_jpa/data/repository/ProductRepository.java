@@ -2,6 +2,9 @@ package com.springboot.advanced_jpa.data.repository;
 
 
 import com.springboot.advanced_jpa.data.entity.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -64,4 +67,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByNameContains(String name);
     List<Product> findByNameStartsWith(String name);
     List<Product> findByNameEndingWith(String name);
+
+    /*쿼리 정렬*/
+
+    List<Product> findByNameOrderByNumberAscPriceDesc(String name);
+    //이처럼 쿼리 메서드 이름에 정렬 키워드를 삽입해서 정렬을 수행할 수 있지만, 가독성이 떠러지기에
+    //이를 해결하기위해 매개변수를 활용할 수 있다.
+    List<Product> findByName(String name, Sort sort);
+    //test.data.repository
+
+    /* 페이징: 데이터베이스의 레코드를 개수로 나눠 페이지를 구분하는 것을 의미한다. JPA 에서는 페이징 처리를 위해
+    * Page 와 Pageable 을 사용한다.*/
+    Page<Product> findByName(String name, Pageable pageable); //ProductRepositoryTest
+
+
 }
